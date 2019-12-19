@@ -79,9 +79,9 @@ class ExcelExport
 
     private function addRows()
     {
-        collect($this->exporter->rows())->each(function ($row) {
-            $this->writer->addRow($this->row($row));
-        });
+        collect($this->exporter->rows())->each(fn($row) => (
+            $this->writer->addRow($this->row($row))
+        ));
 
         return $this;
     }
