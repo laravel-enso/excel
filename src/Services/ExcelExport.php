@@ -2,15 +2,13 @@
 
 namespace LaravelEnso\Excel\Services;
 
-use Box\Spout\Common\Entity\Row;
-use Box\Spout\Writer\Common\Creator\Style\StyleBuilder;
-use Box\Spout\Writer\Common\Creator\WriterEntityFactory;
-use Box\Spout\Writer\XLSX\Writer;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
 use LaravelEnso\Excel\Contracts\ExportsExcel;
 use LaravelEnso\Excel\Contracts\SavesToDisk;
+use OpenSpout\Common\Entity\Row;
+use OpenSpout\Writer\XLSX\Writer;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class ExcelExport
@@ -19,7 +17,7 @@ class ExcelExport
 
     public function __construct(private ExportsExcel $exporter)
     {
-        $this->writer = $this->writer();
+        $this->writer = new Writer();
     }
 
     public function inline(): BinaryFileResponse
@@ -77,9 +75,9 @@ class ExcelExport
         return $this;
     }
 
-    private function row($data): Row
+    private function row(array $data): Row
     {
-        return WriterEntityFactory::createRowFromArray($data);
+        return Row::fromValues($data);
     }
 
     private function path(): string
@@ -93,15 +91,5 @@ class ExcelExport
         }
 
         return Storage::path("{$folder}/{$this->exporter->filename()}");
-    }
-
-    private function writer(): Writer
-    {
-        $defaultStyle = (new StyleBuilder())
-            ->setShouldWrapText(false)
-            ->build();
-
-        return WriterEntityFactory::createXLSXWriter()
-            ->setDefaultRowStyle($defaultStyle);
     }
 }
