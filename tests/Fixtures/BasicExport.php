@@ -14,7 +14,7 @@ class BasicExport implements ExportsExcel
     public function heading(string $sheet): array
     {
         return match ($sheet) {
-            'stock' => ['Product', 'Quantity'],
+            'stock'   => ['Product', 'Quantity'],
             'history' => ['Date', 'Product', 'Quantity'],
         };
     }

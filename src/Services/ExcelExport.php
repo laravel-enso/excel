@@ -86,7 +86,7 @@ class ExcelExport
             ? $this->exporter->folder()
             : 'temp';
 
-        if (! Storage::exists($folder)) {
+        if (!Storage::exists($folder)) {
             Storage::makeDirectory($folder);
         }
 
